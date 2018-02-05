@@ -27,4 +27,14 @@ describe('Testing the Hapi server', () => {
       done();
     });
   });
+  it('Should return the data with the ratings sorted by Author', (done) => {
+    const request = {
+      method: 'GET',
+      url: '/books',
+    };
+    Server.inject(request, (response) => {
+      expect(Object.keys(response.result.dataWRatingSortedByAuthor).length).toBe(2);
+      done();
+    });
+  });
 });

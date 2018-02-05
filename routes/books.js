@@ -28,8 +28,17 @@ module.exports = [
             });
           });
         }).then((dataWRating) => {
+          const dataWRatingSortedByAuthor = {};
+          dataWRating.forEach((elem) => {
+            const { Author: author } = elem;
+            dataWRatingSortedByAuthor[author] = [];
+          });
+          dataWRating.forEach((elem) => {
+            const { Author: author } = elem;
+            dataWRatingSortedByAuthor[author].push(elem);
+          });
           resp({ // Sending it as a response
-            dataWRating,
+            dataWRatingSortedByAuthor,
             statusCode: 201,
           });
         });
