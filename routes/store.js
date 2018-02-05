@@ -1,9 +1,10 @@
+const Models = require('../models');
 const request = require('request');
 
 module.exports = [
   {
     method: 'GET',
-    path: '/books',
+    path: '/store',
     handler: (req, resp) => {
       let booksData = {};
       // Getting all the books
@@ -26,19 +27,30 @@ module.exports = [
               }
             });
           });
-        }).then((dataWRating) => { // Combining by authors
-          const dataWRatingSortedByAuthor = {};
-          dataWRating.forEach((elem) => {
-            const { Author: author } = elem;
-            dataWRatingSortedByAuthor[author] = [];
-          });
-          dataWRating.forEach((elem) => {
-            const { Author: author } = elem;
-            dataWRatingSortedByAuthor[author].push(elem);
-          });
-          resp({ // Sending it as a response
-            dataWRatingSortedByAuthor,
-            statusCode: 201,
+        }).then((dataWRating) => {
+          const lenNow = dataWRating.length;
+          let i = 0;
+          new Promise((resolve) => {
+            dataWRating.forEach((elem) => {
+              Models.Books.upsert({
+                id: elem.id,
+                Name: elem.Name,
+                Author: elem.Author,
+              }).then(() => {
+                i += 1; // Checking the number of records written
+                if (i === lenNow) { resolve(i); }
+              }).catch((error) => {
+                resp({
+                  data: `Error has occurred => ${error}`,
+                  statusCode: 500,
+                });
+              });
+            });
+          }).then((yes) => {
+            resp({ // Sending it as a response
+              yes,
+              statusCode: 201,
+            });
           });
         });
       });
