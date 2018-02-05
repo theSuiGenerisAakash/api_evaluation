@@ -1,12 +1,38 @@
 const Models = require('../models');
+const request = require('request');
 
 module.exports = [
   {
     method: 'GET',
     path: '/books',
-    handler: (request, response) => {
-      response({
-        statusCode: 200,
+    handler: (req, resp) => {
+      let booksData = {};
+      // Getting all the books
+      new Promise((resolve) => {
+        request('https://5gj1qvkc5h.execute-api.us-east-1.amazonaws.com/dev/allBooks', (error, res, body) => {
+          booksData = JSON.parse(body).books;
+          resolve('');
+        });
+      }).then(() => { // Getting the ratings for those books
+        const len = booksData.length;
+        const booksDataWRating = [];
+        new Promise((resolve) => {
+          booksData.forEach((curr) => {
+            request(`https://5gj1qvkc5h.execute-api.us-east-1.amazonaws.com/dev/findBookById/${curr.id}`, (error, res, body) => {
+              const currToChange = curr;
+              currToChange.rating = JSON.parse(body).rating;
+              booksDataWRating.push(currToChange);
+              if (len === booksDataWRating.length) {
+                resolve(booksDataWRating);
+              }
+            });
+          });
+        }).then((dataWRating) => {
+          resp({ // Sending it as a response
+            dataWRating,
+            statusCode: 201,
+          });
+        });
       });
     },
   },
