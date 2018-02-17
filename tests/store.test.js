@@ -7,7 +7,7 @@ describe('testing storing', () => {
       url: '/store',
     };
     Server.inject(request, (response) => {
-      expect(response.result.yes).toBe(12);
+      expect(response.result.statusCode).toBe(201);
       done();
     });
   });

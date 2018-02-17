@@ -28,27 +28,19 @@ module.exports = [
             });
           });
         }).then((dataWRating) => {
-          const lenNow = dataWRating.length;
-          let i = 0;
-          new Promise((resolve) => {
-            dataWRating.forEach((elem) => {
-              Models.Books.upsert({
-                id: elem.id,
-                Name: elem.Name,
-                Author: elem.Author,
-              }).then(() => {
-                i += 1; // Checking the number of records written
-                if (i === lenNow) { resolve(i); }
-              }).catch((error) => {
-                resp({
-                  data: `Error has occurred => ${error}`,
-                  statusCode: 500,
-                });
-              });
-            });
-          }).then((yes) => {
-            resp({ // Sending it as a response
-              yes,
+          const promiseArr = [];
+          dataWRating.forEach((elem) => {
+            promiseArr.push(Models.Books.upsert({
+              id: elem.id,
+              Name: elem.Name,
+              Author: elem.Author,
+              Rating: elem.rating,
+            }).catch((error) => {
+              console.log(error);
+            }));
+          });
+          Promise.all(promiseArr).then(() => {
+            resp({
               statusCode: 201,
             });
           });
