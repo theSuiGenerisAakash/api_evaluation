@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
+    LikeStatus: DataTypes.ENUM('LIKE', 'DISLIKE'),
   }, {
     classMethods: {
       associate(models) {
