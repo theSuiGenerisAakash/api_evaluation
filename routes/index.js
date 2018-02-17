@@ -1,4 +1,4 @@
 const books = require('./books');
-const store = require('./store');
+const storeRatings = require('./storeRatings');
 
-module.exports = [].concat(books, store);
+module.exports = [].concat(books, storeRatings);

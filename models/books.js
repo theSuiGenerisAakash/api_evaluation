@@ -4,6 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     Name: DataTypes.STRING,
     Author: DataTypes.STRING,
     Rating: DataTypes.FLOAT,
+    id: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
   }, {
     classMethods: {
       associate(models) {
