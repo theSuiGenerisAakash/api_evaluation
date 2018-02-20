@@ -41,6 +41,7 @@ module.exports = [
           });
           Promise.all(promiseArr).then(() => {
             resp({
+              dataWRating,
               statusCode: 201,
             });
           });

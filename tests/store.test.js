@@ -8,6 +8,13 @@ describe('testing storing', () => {
     };
     Server.inject(request, (response) => {
       expect(response.result.statusCode).toBe(201);
+      expect(response.result.dataWRating instanceof Array).toBe(true);
+      expect(response.result.dataWRating[0]).toEqual(expect.objectContaining({
+        Author: expect.any(String),
+        id: expect.any(Number),
+        Name: expect.any(String),
+        rating: expect.any(Number),
+      }));
       done();
     });
   });
