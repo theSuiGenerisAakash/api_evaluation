@@ -38,7 +38,6 @@ module.exports = [
           });
           resp({ // Sending it as a response
             dataWRatingSortedByAuthor,
-            statusCode: 201,
           });
         });
       });
