@@ -1,9 +1,17 @@
 const Models = require('../models');
+const Joi = require('joi');
 
 module.exports = [
   {
     method: 'GET',
     path: '/dislike/{id?}',
+    config: {
+      validate: {
+        params: {
+          id: Joi.number().positive().min(0).precision(0),
+        },
+      }
+    },
     handler: (req, response) => {
       const bookID = req.params.id ? encodeURIComponent(req.params.id) : 'blech';
       if (bookID === 'blech') {

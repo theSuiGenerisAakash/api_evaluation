@@ -1,15 +1,23 @@
 const Models = require('../models');
+const Joi = require('joi');
 
 module.exports = [
   {
     method: 'GET',
     path: '/like/{id?}',
+    config: {
+      validate: {
+        params: {
+          id: Joi.number().positive().min(0).precision(0),
+        },
+      }
+    },
     handler: (req, response) => {
       const bookID = req.params.id ? encodeURIComponent(req.params.id) : 'blech';
       if (bookID === 'blech') {
         response({
           statusCode: 400,
-          message: 'No id received',
+          message: 'Invalid id received',
         });
         return;
       }
